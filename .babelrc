@@ -1,0 +1,38 @@
+{
+  "plugins": [
+    "react-hot-loader/babel"
+  ],
+  "presets": [
+    ["env", {
+      "targets": { "browsers": [ "last 2 versions", "not ie <= 11" ] },
+      "loose": true,
+      "modules": false,
+      "useBuiltIns": true
+    }],
+    "es2015",
+    "stage-0",
+    "react"
+  ],
+  "env": {
+    "development": {
+      "plugins": [
+        "transform-commonjs-es2015-modules",
+        "transform-object-rest-spread",
+        "transform-es2015-shorthand-properties",
+        "transform-function-bind"
+      ]
+    },
+    "node": {
+      "presets": [
+        ["env", {
+          "targets": { "node": 7 },
+          "loose": true,
+          "modules": "commonjs"
+        }],
+        "es2015",
+        "stage-0",
+        "react"
+      ]
+    }
+  }
+}

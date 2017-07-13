@@ -1,0 +1,142 @@
+{
+  "name": "ignition",
+  "main": "dist/app.js",
+  "version": "0.1.0",
+  "description": "Get off the ground with React, Redux, Apollo and Webpack.",
+  "productName": "Ignition",
+  "homepage": "https://github.com/saeris/ignition#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/saeris/ignition.git"
+  },
+  "author": "Drake Costa <drake@saeris.io> (http://saeris.io/)",
+  "keywords": [
+    "react",
+    "redux",
+    "apollo",
+    "graphql",
+    "webpack"
+  ],
+  "bugs": {
+    "url": "https://github.com/saeris/ignition/issues"
+  },
+  "scripts": {
+    "clean": "npm cache clean && del-cli node_modules",
+    "clean:dist": "del-cli dist",
+    "preclean:install": "npm run clean",
+    "watch": "npm run watch:dev",
+    "watch:dev": "npm run build:dev -- --watch",
+    "watch:prod": "npm run build:prod -- --watch",
+    "build": "npm run build:dev",
+    "prebuild:dev": "npm run clean:dist",
+    "build:dev": "cross-env NODE_ENV=development npm run webpack -- --progress --profile",
+    "prebuild:prod": "npm run clean:dist",
+    "build:prod": "cross-env NODE_ENV=production npm run webpack -- --progress --profile",
+    "start": "npm run server:dev",
+    "server": "npm run server:dev",
+    "server:dev": "cross-env NODE_ENV=development npm run webpack-dev-server -- --inline --progress --profile --watch --port 9000 --colors",
+    "server:prod": "http-server dist --cors",
+    "webpack": "cross-env BABEL_ENV=node ./node_modules/.bin/webpack",
+    "webpack-dev-server": "cross-env BABEL_ENV=node ./node_modules/.bin/webpack-dev-server"
+  },
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "font-awesome": "^4.6.3",
+    "history": "^4.6.3",
+    "jquery": "^3.0.0",
+    "prop-types": "^15.5.10",
+    "react": "^15.6.1",
+    "react-apollo": "^1.4.3",
+    "react-dom": "^15.6.1",
+    "react-hot-loader": "next",
+    "react-redux": "^5.0.5",
+    "react-router": "^4.1.1",
+    "react-router-dom": "^4.1.1",
+    "react-router-redux": "next",
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
+    "redux-persist": "^4.8.2",
+    "whatwg-fetch": "^2.0.0"
+  },
+  "devDependencies": {
+    "@easy-webpack/config-babel": "^4.0.2",
+    "@easy-webpack/config-common-chunks-simple": "^2.0.3",
+    "@easy-webpack/config-copy-files": "^1.1.2",
+    "@easy-webpack/config-css": "^4.0.0",
+    "@easy-webpack/config-env-development": "^2.1.4",
+    "@easy-webpack/config-env-production": "^3.0.0",
+    "@easy-webpack/config-external-source-maps": "^3.1.0",
+    "@easy-webpack/config-fonts-and-images": "^3.1.0",
+    "@easy-webpack/config-generate-index-html": "^2.1.1",
+    "@easy-webpack/config-global-bluebird": "^2.1.0",
+    "@easy-webpack/config-global-jquery": "^2.1.0",
+    "@easy-webpack/config-global-regenerator": "^1.2.2",
+    "@easy-webpack/config-html": "^3.1.0",
+    "@easy-webpack/config-json": "^3.1.0",
+    "@easy-webpack/config-offline": "^3.0.0",
+    "@easy-webpack/config-sass": "^5.0.0",
+    "@easy-webpack/core": "^2.0.0",
+    "autoprefixer": "^7.1.2",
+    "babel-core": "^6.20.0",
+    "babel-eslint": "^7.1.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-commonjs-es2015-modules": "^3.0.2",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-es2015-classes": "^6.24.1",
+    "babel-plugin-transform-es2015-shorthand-properties": "^6.18.0",
+    "babel-plugin-transform-function-bind": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.20.2",
+    "babel-polyfill": "^6.20.0",
+    "babel-preset-env": "^1.0.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-react-hmre": "^1.1.1",
+    "babel-preset-react-native": "^2.1.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "cross-env": "^5.0.1",
+    "del-cli": "^1.1.0",
+    "eslint": "^4.2.0",
+    "eslint-plugin-compat": "^1.0.1",
+    "eslint-plugin-graphql": "^1.1.0",
+    "eslint-plugin-jest": "^20.0.3",
+    "eslint-plugin-react": "^7.1.0",
+    "favicons-webpack-plugin": "0.0.7",
+    "graphql-tag": "^2.4.2",
+    "ignore-loader": "^0.1.2",
+    "jasmine-core": "^2.5.2",
+    "karma": "^1.4.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-coverage": "^1.1.1",
+    "karma-jasmine": "^1.1.0",
+    "karma-mocha-reporter": "^2.2.0",
+    "karma-remap-istanbul": "^0.6.0",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^2.0.1",
+    "lodash": "^4.17.4",
+    "postcss-cssnext": "^3.0.2",
+    "postcss-flexbugs-fixes": "^3.0.0",
+    "postcss-load-config": "^1.0.0",
+    "postcss-loader": "^2.0.6",
+    "webpack": "^3.0.0",
+    "webpack-bundle-analyzer": "^2.8.3",
+    "webpack-dev-server": "^2.5.0"
+  },
+  "postcss": {
+    "plugins": {
+      "postcss-cssnext": {
+        "browsers": [
+          "last 2 versions"
+        ]
+      },
+      "postcss-flexbugs-fixes": {}
+    }
+  },
+  "browserslist": {
+    "development": [
+      "last 2 versions"
+    ],
+    "production": [
+      "last 4 versions"
+    ]
+  }
+}
