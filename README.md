@@ -1,4 +1,4 @@
-# ignition
+# Ignition
 
 ## What is Ignition?
 
