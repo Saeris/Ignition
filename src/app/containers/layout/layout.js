@@ -8,7 +8,7 @@ export class Layout extends Component {
 
   render() {
     return (
-      <main className="layout">
+      <main styleName="layout">
         {this.props.children}
       </main>
     )

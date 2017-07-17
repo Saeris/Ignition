@@ -1,6 +1,17 @@
 {
   "plugins": [
-    "react-hot-loader/babel"
+    "react-hot-loader/babel",
+    ["react-css-modules", {
+      "filetypes": {
+        ".scss": {
+          "syntax": "postcss-scss",
+          "plugins": ["postcss-nested"]
+        }
+      },
+      "generateScopedName": "[name]_[hash:base64:5]",
+      "webpackHotModuleReloading": true
+    }],
+    "lodash"
   ],
   "presets": [
     ["env", {
@@ -9,27 +20,26 @@
       "modules": false,
       "useBuiltIns": true
     }],
-    "es2015",
+    ["es2015", { "modules": false }],
     "stage-0",
     "react"
   ],
   "env": {
-    "development": {
+    "node": {
       "plugins": [
-        "transform-commonjs-es2015-modules",
+        "transform-decorators-legacy",
+        "transform-class-properties",
         "transform-object-rest-spread",
         "transform-es2015-shorthand-properties",
         "transform-function-bind"
-      ]
-    },
-    "node": {
+      ],
       "presets": [
         ["env", {
           "targets": { "node": 7 },
           "loose": true,
           "modules": "commonjs"
         }],
-        "es2015",
+        ["es2015", { "modules": false }],
         "stage-0",
         "react"
       ]

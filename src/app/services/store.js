@@ -14,7 +14,9 @@ class Store {
     this.state.dispatch({type: `INIT_STATE`})
   }
 
-  composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ routerActions }) || compose
+  composeEnhancers = typeof window === `object` && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ routerActions })
+    : compose
 
   createReducer(asyncReducers) {
     return combineReducers({
