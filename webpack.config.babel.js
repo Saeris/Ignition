@@ -44,7 +44,10 @@ export default ({
       `react-router-dom`,
       `react-router-redux`,
       `redux`,
-      `redux-logger`,
+      `redux-logger`
+    ],
+    polyfills: [
+      `babel-polyfill`,
       `whatwg-fetch`
     ],
     app: [
@@ -141,6 +144,7 @@ export default ({
       template: `./public/index.ejs`,
       title,
       baseURL,
+      inject: false,
       chunksSortMode: `dependency`,
       minify: envProd ? {
         removeComments: true,
