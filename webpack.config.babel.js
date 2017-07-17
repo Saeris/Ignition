@@ -19,10 +19,21 @@ const srcDir = path.join(__dirname, `src`)
 const outDir = path.join(__dirname, `dist`)
 const npmDir = path.join(__dirname, `node_modules`)
 
+const appCSS = new ExtractTextPlugin({
+  filename: `[name]_[chunkhash].css`,
+  allChunks: true
+})
+
+const vendorCSS = new ExtractTextPlugin({
+  filename: `vendor_[chunkhash].css`,
+  allChunks: true
+})
+
 export default ({
   entry: {
     vendor: [
       `font-awesome/scss/font-awesome.scss`,
+      `bootstrap/scss/bootstrap-reboot.scss`,
       `history`,
       `prop-types`,
       `preact`,
@@ -73,17 +84,29 @@ export default ({
   module: {
     rules: [
       { test: /\.jsx?$/, exclude: npmDir, loader: `babel-loader` },
-      { test: /\.(css|scss|sass)$/, use: ExtractTextPlugin.extract({
-        fallback: `style-loader`,
-        use: [
+      { test: /\.(css|scss|sass)$/, include: srcDir, use: appCSS.extract({
+        fallback: `style-loader`, use: [
           { loader: `css-loader`, options: {
             modules: true,
             sourceMap: envDev,
             localIdentName: `[name]_[hash:base64:5]`,
-            importLoaders: 2
-          }},
-          { loader: `postcss-loader`, options: { sourceMap: envDev }},
-          { loader: `sass-loader`, options: { sourceMap: envDev } }
+            importLoaders: 3
+          } },
+          { loader: `postcss-loader`, options: { sourceMap: envDev } },
+          { loader: `resolve-url-loader`, options: {sourceMap: envDev } },
+          { loader: `sass-loader`, options: { sourceMap: true, precision: 8 } }
+        ]
+      })},
+      { test: /\.(css|scss|sass)$/, exclude: srcDir,  use: vendorCSS.extract({
+        fallback: `style-loader`, use: [
+          { loader: `css-loader`, options: {
+            modules: false,
+            sourceMap: envDev,
+            importLoaders: 3
+          } },
+          { loader: `postcss-loader`, options: { sourceMap: envDev } },
+          { loader: `resolve-url-loader`, options: {sourceMap: envDev } },
+          { loader: `sass-loader`, options: { sourceMap: true, precision: 8 } }
         ]
       })},
       //{ test: require.resolve(`jquery`), loader: `expose-loader?$!expose-loader?jQuery` },
@@ -162,10 +185,8 @@ export default ({
       }}
     }) : null),
     new LodashModuleReplacementPlugin,
-    new ExtractTextPlugin({
-      filename: `[name]_[chunkhash].css`,
-      allChunks: true
-    }),
+    appCSS,
+    vendorCSS,
     new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       name: `vendor`,
