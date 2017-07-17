@@ -1,5 +1,4 @@
 import { Layout } from '../../containers'
-import { connect } from 'react-redux'
 import './home.scss'
 
 const mapStateToProps = (state, ownProps) => ({
@@ -10,12 +9,13 @@ const mapDispatchToProps = dispatch => ({
 
 })
 
-class Home extends Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class Home extends Component {
   render() {
     return (
       <Layout>
-        <div className="home">
-          <div className="header">
+        <div styleName="home">
+          <div styleName="header">
             <h1>🚀</h1>
             <h2>Ready for liftoff!</h2>
           </div>
@@ -24,5 +24,3 @@ class Home extends Component {
     )
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
