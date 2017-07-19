@@ -1,10 +1,12 @@
 import path from 'path'
-import webpack from 'webpack'
+import { DefinePlugin, ProvidePlugin, LoaderOptionsPlugin, HotModuleReplacementPlugin, NamedModulesPlugin, NoEmitOnErrorsPlugin, optimize } from 'webpack'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
 import LodashModuleReplacementPlugin from 'lodash-webpack-plugin' // https://github.com/lodash/lodash-webpack-plugin
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
+
+const { ModuleConcatenationPlugin, CommonsChunkPlugin, UglifyJsPlugin } = optimize
 
 const ENV = process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase() || (process.env.NODE_ENV = `development`)
 const envDev = ENV === `development`
@@ -18,6 +20,8 @@ const srcDir = path.join(__dirname, `src`)
 //const pubDir = path.join(__dirname, `public`)
 const outDir = path.join(__dirname, `dist`)
 const npmDir = path.join(__dirname, `node_modules`)
+
+const isVendor = ({ resource }) => resource && resource.indexOf(npmDir) !== -1
 
 const appCSS = new ExtractTextPlugin({
   filename: `[name]_[chunkhash].css`,
@@ -51,9 +55,11 @@ export default ({
       `whatwg-fetch`
     ],
     app: [
-      `react-hot-loader/patch`,
-      `webpack-dev-server/client?http://${host}:${port}/`,
-      `webpack/hot/only-dev-server`,
+      ...(envDev ? [
+        `react-hot-loader/patch`,
+        `webpack-dev-server/client?http://${host}:${port}/`,
+        `webpack/hot/only-dev-server`
+      ] : []),
       `./src/app.js`
     ]
   },
@@ -156,7 +162,7 @@ export default ({
       //{ from: `favicon.ico`, to: `favicon.ico` },
       { context: `src/img`, from: `**/*`, to: `img` }
     ]),
-    new webpack.DefinePlugin({
+    new DefinePlugin({
       '__DEV__': !envProd,
       'ENV': JSON.stringify(ENV),
       'HMR': true,
@@ -170,7 +176,7 @@ export default ({
         } : {})
       }
     }),
-    new webpack.ProvidePlugin({
+    new ProvidePlugin({
       React : `react`,
       Component: [`react`, `Component`],
       connect: [`react-redux`, `connect`],
@@ -181,25 +187,35 @@ export default ({
       regeneratorRuntime: `regenerator-runtime`,
       Promise: `core-js/fn/promise`
     }),
-    (envProd ? new webpack.LoaderOptionsPlugin({
+    (envProd ? new LoaderOptionsPlugin({
       options: { htmlLoader: {
         minimize: true,
         removeAttributeQuotes: false,
         caseSensitive: true
-      }}
+      } }
     }) : null),
-    new LodashModuleReplacementPlugin,
+    new LodashModuleReplacementPlugin(),
     appCSS,
     vendorCSS,
-    new webpack.optimize.ModuleConcatenationPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: `vendor`,
-      minChunks: (module, count) => (module.resource && module.resource.indexOf(npmDir) === 0)
+    new ModuleConcatenationPlugin(),
+    new CommonsChunkPlugin({
+      name: `common`,
+      minChunks: (module, count) => count >= 2 && !isVendor(module)
     }),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
+    new CommonsChunkPlugin({
+      name: `polyfills`,
+      chunks: [`polyfills`],
+      minChunks: isVendor
+    }),
+    new CommonsChunkPlugin({
+      name: `vendor`,
+      chunks: [`app`, `vendor`, `polyfills`],
+      minChunks: (module, count) => count >= 2 && isVendor(module)
+    }),
+    (envDev ? new HotModuleReplacementPlugin() : null),
+    new NamedModulesPlugin(),
+    new NoEmitOnErrorsPlugin(),
+    new UglifyJsPlugin({
       beautify: envDev,
       comments: envDev,
       mangle: envProd,

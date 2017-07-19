@@ -1,4 +1,4 @@
-import { ApolloClient, createBatchingNetworkInterface} from 'react-apollo'
+import { ApolloClient, createBatchingNetworkInterface } from "react-apollo"
 
 class Apollo {
   constructor() {
@@ -11,15 +11,17 @@ class Apollo {
     })
 
     // Add authorization tokens to our request headers before making calls to the api
-    networkInterface.use([{
-      applyBatchMiddleware(req, next) {
-        if (!req.options.headers) {
-          req.options.headers = {}
+    networkInterface.use([
+      {
+        applyBatchMiddleware(req, next) {
+          if (!req.options.headers) {
+            req.options.headers = {}
+          }
+          //req.options.headers.authorization = `bearer ${token}`
+          next()
         }
-        //req.options.headers.authorization = `bearer ${token}`
-        next()
       }
-    }])
+    ])
 
     this.client = new ApolloClient({
       networkInterface,

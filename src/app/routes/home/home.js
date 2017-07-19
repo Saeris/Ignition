@@ -1,13 +1,9 @@
-import { Layout } from '../../containers'
-import './home.scss'
+import { Layout } from "../../containers"
+import "./home.scss"
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state, ownProps) => ({})
 
-})
-
-const mapDispatchToProps = dispatch => ({
-
-})
+const mapDispatchToProps = dispatch => ({})
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Home extends Component {

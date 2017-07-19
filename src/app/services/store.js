@@ -1,9 +1,13 @@
-import { createStore, combineReducers, compose, applyMiddleware } from 'redux'
-import { createLogger } from 'redux-logger'
-import { routerReducer, routerMiddleware, routerActions } from 'react-router-redux'
-import { persistStore, autoRehydrate } from 'redux-persist'
-import createHistory from 'history/createBrowserHistory'
-import { apollo } from './apollo'
+import { createStore, combineReducers, compose, applyMiddleware } from "redux"
+import { createLogger } from "redux-logger"
+import {
+  routerReducer,
+  routerMiddleware,
+  routerActions
+} from "react-router-redux"
+import { persistStore, autoRehydrate } from "redux-persist"
+import createHistory from "history/createBrowserHistory"
+import { apollo } from "./apollo"
 
 class Store {
   constructor() {
@@ -11,12 +15,13 @@ class Store {
     this.apollo = apollo.client
     this.state = this.configureStore()
     persistStore(this.state)
-    this.state.dispatch({type: `INIT_STATE`})
+    this.state.dispatch({ type: `INIT_STATE` })
   }
 
-  composeEnhancers = typeof window === `object` && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  composeEnhancers = typeof window === `object` &&
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ routerActions })
-    : compose
+    : compose;
 
   createReducer(asyncReducers) {
     return combineReducers({
