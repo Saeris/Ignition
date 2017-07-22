@@ -18,8 +18,8 @@ class Store {
     this.state.dispatch({ type: `INIT_STATE` })
   }
 
-  composeEnhancers = typeof window === `object` &&
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  composeEnhancers = typeof window === `object`
+  && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ routerActions })
     : compose;
 
@@ -46,8 +46,6 @@ class Store {
     return store
   }
 
-  // NOTE: This method can be used to dynamically add new reducers when a component is imported,
-  // allowing for progressive enhancement when used with route-based code-splitting
   addReducer(name, reducer) {
     let newReducers = {}
     newReducers[`${name}`] = reducer
@@ -56,5 +54,17 @@ class Store {
   }
 }
 
-// Export our store service as a singleton to be accessed anywhere within the application
+export const Reducer = Class =>
+  class extends Class {
+    constructor(...args) {
+      super(...args)
+      this.addToStore()
+    }
+
+    addToStore = () => {
+      const name = super.constructor.name.toLowerCase().replace(`reducer`, ``)
+      store.addReducer(name, this.reducer)
+    };
+  }
+
 export const store = new Store()

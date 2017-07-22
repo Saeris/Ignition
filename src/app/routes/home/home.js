@@ -1,11 +1,11 @@
 import { Layout } from "../../containers"
 import "./home.scss"
 
-const mapStateToProps = (state, ownProps) => ({})
+const selectors = (state, ownProps) => ({})
 
-const mapDispatchToProps = dispatch => ({})
+const actions = dispatch => ({})
 
-@connect(mapStateToProps, mapDispatchToProps)
+@connect(selectors, actions)
 export default class Home extends Component {
   render() {
     return (

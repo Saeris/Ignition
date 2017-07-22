@@ -1,15 +1,16 @@
-import { PropTypes } from "prop-types"
+import { Modal } from ".."
 import "./layout.scss"
 
-export class Layout extends Component {
+export default class Layout extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired
   };
 
-  render() {
+  render({ children }) {
     return (
       <main styleName="layout">
-        {this.props.children}
+        <Modal />
+        {children}
       </main>
     )
   }

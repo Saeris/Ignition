@@ -1,37 +1,17 @@
 {
-  "plugins": [
-    "react-hot-loader/babel",
-    ["react-css-modules", {
-      "filetypes": {
-        ".scss": {
-          "syntax": "postcss-scss",
-          "plugins": ["postcss-nested"]
-        }
-      },
-      "generateScopedName": "[name]_[hash:base64:5]",
-      "webpackHotModuleReloading": true
-    }],
-    "lodash"
-  ],
-  "presets": [
-    ["env", {
-      "targets": { "browsers": [ "last 2 versions", "not ie <= 11" ] },
-      "loose": true,
-      "modules": false,
-      "useBuiltIns": true
-    }],
-    ["es2015", { "modules": false }],
-    "stage-0",
-    "react"
-  ],
   "env": {
     "node": {
       "plugins": [
-        "transform-decorators-legacy",
-        "transform-class-properties",
-        "transform-object-rest-spread",
-        "transform-es2015-shorthand-properties",
-        "transform-function-bind"
+        ["react-css-modules", {
+          "filetypes": {
+            ".scss": {
+              "syntax": "postcss-scss",
+              "plugins": ["postcss-nested"]
+            }
+          },
+          "generateScopedName": "[name]_[hash:base64:5]",
+          "webpackHotModuleReloading": true
+        }]
       ],
       "presets": [
         ["env", {
@@ -41,7 +21,110 @@
         }],
         ["es2015", { "modules": false }],
         "stage-0",
+        "flow",
         "react"
+      ]
+    },
+    "test": {
+      "plugins": [
+        "espower",
+        ["react-css-modules", {
+          "filetypes": {
+            ".scss": {
+              "syntax": "postcss-scss",
+              "plugins": ["postcss-nested"]
+            }
+          },
+          "generateScopedName": "[name]_[hash:base64:5]",
+          "webpackHotModuleReloading": false
+        }],
+        [ "babel-plugin-webpack-alias", { "config": "./webpack.config.babel.js" } ]
+      ],
+      "presets": [
+        ["env", {
+          "targets": { "node": 7 },
+          "loose": true,
+          "modules": "commonjs"
+        }],
+        ["es2015", { "modules": false }],
+        "stage-0",
+        "flow",
+        "react"
+      ]
+    },
+    "development": {
+      "plugins": [
+        "react-hot-loader/babel",
+        "transform-commonjs-es2015-modules",
+        "transform-decorators-legacy",
+        "transform-class-properties",
+        "transform-object-rest-spread",
+        "transform-es2015-shorthand-properties",
+        "transform-function-bind",
+        ["transform-react-jsx", { "pragma":"h" }],
+        ["react-css-modules", {
+          "filetypes": {
+            ".scss": {
+              "syntax": "postcss-scss",
+              "plugins": ["postcss-nested"]
+            }
+          },
+          "generateScopedName": "[name]_[hash:base64:5]",
+          "webpackHotModuleReloading": true
+        }],
+        "lodash"
+      ],
+      "presets": [
+        ["env", {
+          "targets": { "browsers": [ "last 2 versions", "not ie <= 11" ] },
+          "loose": true,
+          "modules": false,
+          "useBuiltIns": true
+        }],
+        ["es2015", { "modules": false }],
+        "stage-0",
+        "flow",
+        "react"
+      ]
+    },
+    "production": {
+      "plugins": [
+        "transform-commonjs-es2015-modules",
+        "transform-decorators-legacy",
+        "transform-class-properties",
+        "transform-object-rest-spread",
+        "transform-es2015-shorthand-properties",
+        "transform-function-bind",
+        ["transform-react-jsx", { "pragma":"h" }],
+        ["transform-runtime", {
+          "helpers": false,
+          "polyfill": false,
+          "regenerator": true
+        }],
+        ["react-css-modules", {
+          "filetypes": {
+            ".scss": {
+              "syntax": "postcss-scss",
+              "plugins": ["postcss-nested"]
+            }
+          },
+          "generateScopedName": "[name]_[hash:base64:5]",
+          "webpackHotModuleReloading": false
+        }],
+        "lodash"
+      ],
+      "presets": [
+        ["env", {
+          "targets": { "browsers": [ "last 4 versions", "not ie <= 11" ] },
+          "loose": true,
+          "modules": false,
+          "useBuiltIns": true
+        }],
+        ["es2015", { "modules": false }],
+        "stage-0",
+        "flow",
+        "react",
+        "react-optimize"
       ]
     }
   }
