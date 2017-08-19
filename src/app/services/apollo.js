@@ -14,9 +14,7 @@ class Apollo {
     networkInterface.use([
       {
         applyBatchMiddleware(req, next) {
-          if (!req.options.headers) {
-            req.options.headers = {}
-          }
+          if (!req.options.headers) req.options.headers = {}
           //req.options.headers.authorization = `bearer ${token}`
           next()
         }

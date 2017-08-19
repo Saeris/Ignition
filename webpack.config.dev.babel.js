@@ -1,22 +1,15 @@
-import { join, resolve } from 'path' //eslint-disable-line
+import path from 'path'
 //import util from 'util'
-import { DefinePlugin, ProvidePlugin, LoaderOptionsPlugin, HotModuleReplacementPlugin, NamedModulesPlugin, NoEmitOnErrorsPlugin, optimize } from 'webpack'
-import ExtractTextPlugin from 'extract-text-webpack-plugin'
+import { DefinePlugin, ProvidePlugin, HotModuleReplacementPlugin, NamedModulesPlugin, NoEmitOnErrorsPlugin, optimize } from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import WebpackPwaManifest from 'webpack-pwa-manifest'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
 import LodashModuleReplacementPlugin from 'lodash-webpack-plugin' // https://github.com/lodash/lodash-webpack-plugin
-import SWPrecacheWebpackPlugin from 'sw-precache-webpack-plugin'
-import BrowserSyncPlugin from 'browser-sync-webpack-plugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
-import DashboardPlugin from 'webpack-dashboard/plugin'
 
 const { ModuleConcatenationPlugin, CommonsChunkPlugin, UglifyJsPlugin } = optimize
 
 const ENV = process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase() || (process.env.NODE_ENV = `development`)
-const envDev = ENV === `development`
-const envProd = ENV === `production`
-const envTest = ENV === `test`
 const title = `Ignition`
 const name = `Ignition`
 const description = ``
@@ -25,22 +18,12 @@ const bgColor = `#fff`
 const themeColor = `#2c1e3f`
 const host = process.env.HOST || `localhost`
 const port = process.env.PORT || 9000
-const srcDir = join(__dirname, `src`)
-//const pubDir = join(__dirname, `public`)
-const outDir = join(__dirname, `dist`)
-const npmDir = join(__dirname, `node_modules`)
+const srcDir = path.join(__dirname, `src`)
+//const pubDir = path.join(__dirname, `public`)
+const outDir = path.join(__dirname, `dist`)
+const npmDir = path.join(__dirname, `node_modules`)
 
 const isVendor = ({ resource }) => resource && resource.indexOf(npmDir) !== -1
-
-const appCSS = new ExtractTextPlugin({
-  filename: `[name]_[chunkhash].css`,
-  allChunks: true
-})
-
-const vendorCSS = new ExtractTextPlugin({
-  filename: `vendor_[chunkhash].css`,
-  allChunks: true
-})
 
 const config = {
   entry: {
@@ -64,23 +47,19 @@ const config = {
       `whatwg-fetch`
     ],
     app: [
-      ...(envDev
-        ? [
-          `react-hot-loader/patch`,
-          `webpack-dev-server/client?http://${host}:${port + 100}/`,
-          `webpack/hot/only-dev-server`,
-          `preact/devtools`
-        ]
-        : []),
+      `react-hot-loader/patch`,
+      `webpack-dev-server/client?http://${host}:${port}/`,
+      `webpack/hot/only-dev-server`,
+      `preact/devtools`,
       `./src/app.js`
     ]
   },
   output: {
     path: outDir,
     publicPath: `/`,
-    filename: envProd ? `[name].[chunkhash].bundle.js` : `[name].bundle.js`,
-    sourceMapFilename: envProd ? `[name].[chunkhash].bundle.map` : `[name].bundle.map`,
-    chunkFilename: envProd ? `[id].[chunkhash].chunk.js` : `[id].chunk.js`
+    filename: `[name].bundle.js`,
+    sourceMapFilename: `[name].bundle.map`,
+    chunkFilename: `[id].chunk.js`
   },
   stats: {
     colors: true,
@@ -91,7 +70,6 @@ const config = {
     hints: false
   },
   resolve: {
-    '@': srcDir,
     extensions: [`.js`, `.jsx`, `.json`, `.scss`, `.sass`, `.css`],
     alias: {
       react: `preact-compat/dist/preact-compat`,
@@ -107,31 +85,29 @@ const config = {
   module: {
     rules: [
       { test: /\.jsx?$/, exclude: npmDir, loader: `babel-loader`, options: { forceEnv: ENV } },
-      { test: /\.(css|scss|sass)$/, include: srcDir, use: appCSS.extract({
-        fallback: `style-loader`, use: [
-          { loader: `css-loader`, options: {
-            modules: true,
-            sourceMap: envDev,
-            localIdentName: `[name]_[hash:base64:5]`,
-            importLoaders: 3
-          } },
-          { loader: `postcss-loader`, options: { sourceMap: envDev } },
-          { loader: `resolve-url-loader`, options: {sourceMap: envDev } },
-          { loader: `sass-loader`, options: { sourceMap: true, precision: 8 } }
-        ]
-      })},
-      { test: /\.(css|s[ac]ss)$/, exclude: srcDir,  use: vendorCSS.extract({
-        fallback: `style-loader`, use: [
-          { loader: `css-loader`, options: {
-            modules: false,
-            sourceMap: envDev,
-            importLoaders: 3
-          } },
-          { loader: `postcss-loader`, options: { sourceMap: envDev } },
-          { loader: `resolve-url-loader`, options: {sourceMap: envDev } },
-          { loader: `sass-loader`, options: { sourceMap: true, precision: 8 } }
-        ]
-      })},
+      { test: /\.(css|scss|sass)$/, include: srcDir, use: [
+        { loader: `style-loader`, options: { sourceMap: true } },
+        { loader: `css-loader`, options: {
+          modules: true,
+          sourceMap: true,
+          localIdentName: `[name]_[hash:base64:5]`,
+          importLoaders: 3
+        } },
+        { loader: `postcss-loader`, options: { sourceMap: true } },
+        { loader: `resolve-url-loader`, options: {sourceMap: true } },
+        { loader: `sass-loader`, options: { sourceMap: true, precision: 8 } }
+      ]},
+      { test: /\.(css|s[ac]ss)$/, exclude: srcDir,  use: [
+        { loader: `style-loader`, options: { sourceMap: true } },
+        { loader: `css-loader`, options: {
+          modules: false,
+          sourceMap: true,
+          importLoaders: 3
+        } },
+        { loader: `postcss-loader`, options: { sourceMap: true } },
+        { loader: `resolve-url-loader`, options: {sourceMap: true } },
+        { loader: `sass-loader`, options: { sourceMap: true, precision: 8 } }
+      ]},
       //{ test: require.resolve(`jquery`), loader: `expose-loader?$!expose-loader?jQuery` },
       { test: /\.json$/, loader: `json-loader` },
       { test: /\.(graphql|gql)$/, exclude: npmDir, loader: `graphql-tag/loader` },
@@ -146,7 +122,7 @@ const config = {
   devServer: {
     historyApiFallback: true,
     hot: true,
-    port: port + 100,
+    port: port,
     host: host,
     compress: true,
     inline: true,
@@ -160,16 +136,15 @@ const config = {
       chunks: false
     }
   },
-  devtool: envTest ? `inline-source-map` : `hidden-source-map`,
+  devtool: `source-map`,
   plugins: [
     new HtmlWebpackPlugin({
       template: `./public/index.ejs`,
       title,
       baseURL,
-      serviceWorker: envProd ? `/service-worker.js` : null,
+      serviceWorker: null,
       inject: false,
-      chunksSortMode: `dependency`,
-      minify: envProd ? { removeComments: true, collapseWhitespace: true } : undefined
+      chunksSortMode: `dependency`
     }),
     new WebpackPwaManifest({
       name: title,
@@ -179,52 +154,22 @@ const config = {
       theme_color: themeColor,
       display: `standalone`,
       orientation: `portrait-primary`
-      /*,
-      icons: [{
-        src: resolve(`${pubDir}/images/icons/ios-icon.png`),
-        sizes: [120, 152, 167, 180, 1024],
-        destination: join(`icons`, `ios`)
-      }, {
-        src: resolve(`${pubDir}/images/icons/android-icon.png`),
-        sizes: [36, 48, 72, 96, 144, 192, 512],
-        destination: join(`icons`, `android`)
-      }]*/
     }),
-    ...(envProd
-      ? [
-        new SWPrecacheWebpackPlugin({
-      		navigateFallback: `index.html`,
-          filepath: `${outDir}/service-worker.js`,
-      		minify: true,
-      		staticFileGlobsIgnorePatterns: [
-      			/polyfills(\..*)?\.js$/,
-      			/\.map$/,
-      			/asset-manifest\.json$/
-      		]
-      	}),
-        new LoaderOptionsPlugin({
-          options: { htmlLoader: {
-            minimize: true,
-            removeAttributeQuotes: false,
-            caseSensitive: true
-          } }
-        })
-      ]
-      : []),
     new CopyWebpackPlugin([
       { from: `_redirects` },
       //{ from: `favicon.ico`, to: `favicon.ico` },
       { context: `src/img`, from: `**/*`, to: `img` }
     ]),
     new DefinePlugin({
-      '__DEV__': !envProd,
+      '__DEV__': true,
       'ENV': JSON.stringify(ENV),
       'HMR': true,
       'process.env': {
         'ENV': JSON.stringify(ENV),
         'NODE_ENV': JSON.stringify(ENV),
         'HMR': true,
-        ...(!envProd ? { 'WEBPACK_HOST': JSON.stringify(host), 'WEBPACK_PORT': JSON.stringify(port) } : {})
+        'WEBPACK_HOST': JSON.stringify(host),
+        'WEBPACK_PORT': JSON.stringify(port)
       }
     }),
     new ProvidePlugin({
@@ -243,8 +188,6 @@ const config = {
       Promise: `core-js/fn/promise`
     }),
     new LodashModuleReplacementPlugin(),
-    appCSS,
-    vendorCSS,
     new ModuleConcatenationPlugin(),
     new CommonsChunkPlugin({
       name: `polyfills`,
@@ -256,54 +199,44 @@ const config = {
       chunks: [`app`, `vendor`],
       minChunks: isVendor
     }),
-    ...(envDev
-      ? [
-        new HotModuleReplacementPlugin(),
-        new NamedModulesPlugin(),
-        new NoEmitOnErrorsPlugin(),
-        new BrowserSyncPlugin({ host: host, port: port, proxy: `http://${host}:${port + 100}/` }, { reload: false })
-      ]
-      : []),
+    new HotModuleReplacementPlugin(),
+    new NamedModulesPlugin(),
+    new NoEmitOnErrorsPlugin(),
     new UglifyJsPlugin({
-      beautify: envDev,
-      comments: envDev,
-      sourceMap: envDev,
-      mangle: envProd,
+      beautify: true,
+      comments: true,
+      sourceMap: true,
+      mangle: false,
       compress: {
-        keep_fnames: envDev,
+        keep_fnames: true,
         unused: true,
         dead_code: true,
         warnings: false,
         screw_ie8: true,
-        sequences: envProd,
-        properties: envProd,
-        drop_debugger: envProd,
-        conditionals: envProd,
-        comparisons: envProd,
-        evaluate: envProd,
-        booleans: envProd,
-        loops: envProd,
-        hoist_funs: envProd,
-        if_return: envProd,
-        join_vars: envProd,
-        cascade: envProd,
-        side_effects: envProd,
-        collapse_vars: envProd,
-        reduce_vars: envProd
+        sequences: false,
+        properties: false,
+        drop_debugger: false,
+        conditionals: false,
+        comparisons: false,
+        evaluate: false,
+        booleans: false,
+        loops: false,
+        hoist_funs: false,
+        if_return: false,
+        join_vars: false,
+        cascade: false,
+        side_effects: false,
+        collapse_vars: false,
+        reduce_vars: false
       }
     }),
-    ...(envDev
-      ? [
-        new BundleAnalyzerPlugin({
-          analyzerMode: `server`,
-          analyzerPort: 8888,
-          defaultSizes: `parsed`,
-          openAnalyzer: false
-        }),
-        new DashboardPlugin()
-      ]
-      : [])
-  ].filter(nonNull => nonNull)
+    new BundleAnalyzerPlugin({
+      analyzerMode: `server`,
+      analyzerPort: 8888,
+      defaultSizes: `parsed`,
+      openAnalyzer: false
+    })
+  ]
 }
 
 //console.log(util.inspect(config, {showHidden: false, depth: null}))

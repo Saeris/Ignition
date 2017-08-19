@@ -1,4 +1,6 @@
-{
+const { join } = require(`path`)
+
+module.exports = {
   "root": true,
   "parser": "babel-eslint",
   "env": {
@@ -23,6 +25,7 @@
         "config": {
           "resolve": {
             "alias": {
+              "@": join(__dirname, `src`),
               "react": "preact-compat/dist/preact-compat",
               "react-dom": "preact-compat/dist/preact-compat",
               "create-react-class": "preact-compat/lib/create-react-class"
@@ -131,7 +134,7 @@
     "camelcase"                                 : [2, { "properties": "never" }],
     "comma-spacing"                             : [2, { "before": false, "after": true }],
     "comma-style"                               : [2, "last"],
-    "operator-linebreak"                        : [2, "before"],
+    "operator-linebreak"                        : [2, "before", { "overrides": { "&&": "ignore" } }],
     "multiline-ternary"                         : [2, "always-multiline"],
     "eol-last"                                  : 2,
     "func-names"                                : 0,

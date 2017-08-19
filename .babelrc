@@ -1,18 +1,6 @@
 {
   "env": {
     "node": {
-      "plugins": [
-        ["react-css-modules", {
-          "filetypes": {
-            ".scss": {
-              "syntax": "postcss-scss",
-              "plugins": ["postcss-nested"]
-            }
-          },
-          "generateScopedName": "[name]_[hash:base64:5]",
-          "webpackHotModuleReloading": true
-        }]
-      ],
       "presets": [
         ["env", {
           "targets": { "node": 7 },
@@ -20,9 +8,7 @@
           "modules": "commonjs"
         }],
         ["es2015", { "modules": false }],
-        "stage-0",
-        "flow",
-        "react"
+        "stage-0"
       ]
     },
     "test": {
@@ -123,8 +109,7 @@
         ["es2015", { "modules": false }],
         "stage-0",
         "flow",
-        "react",
-        "react-optimize"
+        "react"
       ]
     }
   }

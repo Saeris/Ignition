@@ -18,8 +18,8 @@ class Store {
     this.state.dispatch({ type: `INIT_STATE` })
   }
 
-  composeEnhancers = typeof window === `object`
-  && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  composeEnhancers = typeof window === `object` &&
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ routerActions })
     : compose;
 
