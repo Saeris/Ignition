@@ -3,12 +3,8 @@
     "test": {
       "sourceMaps": "inline",
       "plugins": [
-        "transform-class-properties",
-        "transform-decorators-legacy",
-        "transform-es2015-shorthand-properties",
-        "transform-function-bind",
-        "transform-object-rest-spread",
-        "transform-optional-chaining",
+        "istanbul",
+        ["babel-plugin-webpack-alias", { "config": "./webpack.config.js"  }],
         ["provide-modules", {
           "classnames": "classNames",
           "core-js/fn/promise": "Promise",
@@ -35,37 +31,28 @@
           "regenerator-runtime": "regeneratorRuntime",
           "prop-types": "PropTypes"
         }],
-        ["babel-plugin-webpack-alias", { "config": "./webpack.config.js"  }],
         ["inline-replace-variables", {
           "ENV": { "type": "node", "replacement": "process.env.NODE_ENV" }
         }],
         ["transform-react-jsx", { "pragma": "h" }],
-
-        "istanbul",
         ["react-css-modules", {
           "filetypes": { ".scss": { "syntax": "postcss-scss" } },
           "generateScopedName": "[local]_[hash:base64:5]",
           "webpackHotModuleReloading": false
-        }],
+        }]
       ],
       "presets": [
         "babel-preset-power-assert",
         ["env", {
           "targets": { "node": "current" },
           "useBuiltIns": "usage"
-        }]
+        }],
+        "stage-0"
       ]
     },
     "development": {
       "plugins": [
         "react-hot-loader/babel",
-
-        "transform-class-properties",
-        "transform-decorators-legacy",
-        "transform-es2015-shorthand-properties",
-        "transform-function-bind",
-        "transform-object-rest-spread",
-        "transform-optional-chaining",
         ["provide-modules", {
           "classnames": "classNames",
           "core-js/fn/promise": "Promise",
@@ -96,14 +83,7 @@
         ["inline-replace-variables", {
           "ENV": { "type": "node", "replacement": "process.env.NODE_ENV" }
         }],
-        ["transform-react-jsx", { "pragma": "h" }],
-
-        "lodash",
-        ["react-css-modules", {
-          "filetypes": { ".scss": { "syntax": "postcss-scss" } },
-          "generateScopedName": "[local]_[hash:base64:5]",
-          "webpackHotModuleReloading": true
-        }],
+        ["transform-react-jsx", { "pragma": "h" }]
       ],
       "presets": [
         ["env", {
@@ -117,12 +97,6 @@
     },
     "production": {
       "plugins": [
-        "transform-class-properties",
-        "transform-decorators-legacy",
-        "transform-es2015-shorthand-properties",
-        "transform-function-bind",
-        "transform-object-rest-spread",
-        "transform-optional-chaining",
         ["provide-modules", {
           "classnames": "classNames",
           "core-js/fn/promise": "Promise",
@@ -154,18 +128,11 @@
           "ENV": { "type": "node", "replacement": "process.env.NODE_ENV" }
         }],
         ["transform-react-jsx", { "pragma": "h" }],
-
-        "lodash",
         ["transform-runtime", {
           "helpers": false,
           "polyfill": false,
           "regenerator": true
-        }],
-        ["react-css-modules", {
-          "filetypes": { ".scss": { "syntax": "postcss-scss" } },
-          "generateScopedName": "[local]_[hash:base64:5]",
-          "webpackHotModuleReloading": false
-        }],
+        }]
       ],
       "presets": [
         ["env", {

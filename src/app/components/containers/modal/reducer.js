@@ -8,6 +8,10 @@ class ModalReducer {
     modals: []
   }
 
+  constructor() {
+    this.name = `modal`
+  }
+
   reducer = (state = this.initialState, action) => {
     const { type, payload } = action
     switch (type) {
@@ -22,10 +26,15 @@ class ModalReducer {
     }
   }
 
-  addModal = (state, payload) =>
-    (state.modals.some(modal => modal.id === payload.id) ? state.modals : [...state.modals, payload])
+  addModal(state, payload) {
+    const modals = state[this.name].modals
+    if (modals.some(modal => modal.id === payload.id)) return modals
+    return [...modals, payload]
+  }
 
-  removeModal = (state, id) => state.filter(modal => modal.id !== id)
+  removeModal(state, id) {
+    state[this.name].modals.filter(modal => modal.id !== id)
+  }
 
   toggleModal = (state, id) => {
     const modals = this.getModals(state)
@@ -34,12 +43,16 @@ class ModalReducer {
     return [...modals]
   }
 
-  getCurrent = state => state.modal.current
+  getCurrent(state) {
+    return state[this.name].current
+  }
 
-  getModals = state => state.modal.modals
+  getModals(state) {
+    return state[this.name].modals
+  }
 
-  getModalByID = (state, id) => {
-    const modal = state.modal.modals[id]
+  getModalByID(state, id) {
+    const modal = state[this.name].modals[id]
     if (modal) return modal
     return null
   }

@@ -55,11 +55,6 @@ export const Reducer = Class =>
   class extends Class {
     constructor(...args) {
       super(...args)
-      this.addToStore()
-    }
-
-    addToStore = () => {
-      const name = super.constructor.name.toLowerCase().replace(`reducer`, ``)
-      store.addReducer(name, this.reducer)
+      store.addReducer(this.name, this.reducer)
     }
   }

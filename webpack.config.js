@@ -1,4 +1,3 @@
-
 const { join, resolve } = require(`path`) // eslint-disable-line
 const { DefinePlugin, /*ProvidePlugin,*/ LoaderOptionsPlugin, HotModuleReplacementPlugin, NamedModulesPlugin, NoEmitOnErrorsPlugin, IgnorePlugin, optimize } = require(`webpack`)
 const ExtractTextPlugin = require(`extract-text-webpack-plugin`)
@@ -23,6 +22,7 @@ const bgColor = `#fff`
 const themeColor = `#2c1e3f`
 const host = process.env.HOST || `localhost`
 const port = process.env.PORT || 9000
+const rootDir = join(__dirname, ``)
 const srcDir = join(__dirname, `src`)
 const pubDir = join(__dirname, `public`)
 const outDir = join(__dirname, `dist`)
@@ -41,6 +41,7 @@ const vendorCSS = new ExtractTextPlugin({
 })
 
 module.exports = {
+  context: rootDir,
   entry: {
     vendor: [
       `font-awesome/scss/font-awesome.scss`,
@@ -101,8 +102,7 @@ module.exports = {
       // Module Aliases
       'react': `preact-compat/dist/preact-compat`,
       'react-dom': `preact-compat/dist/preact-compat`,
-      'create-react-class': `preact-compat/lib/create-react-class`,
-      'react-addons-css-transition-group': `preact-css-transition-group`
+      'create-react-class': `preact-compat/lib/create-react-class`
     },
     modules: [
       srcDir,
@@ -111,32 +111,44 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.jsx?$/, exclude: npmDir, loader: `babel-loader` },
-      { test: /\.(css|s[ac]ss)$/, include: srcDir, use: appCSS.extract({
-        fallback: `style-loader`, use: [
-          { loader: `css-loader`, options: {
+      { test: /\.(css|s[ac]ss)$/, include: srcDir, use: appCSS.extract({ //eslint-disable-line
+        fallback: `style-loader`, use: [ //eslint-disable-line
+          { loader: `css-loader`, options: { //eslint-disable-line
+            context: rootDir,
             modules: true,
             sourceMap: envDev,
             localIdentName: `[local]_[hash:base64:5]`,
             importLoaders: 3
           } },
           { loader: `postcss-loader`, options: { sourceMap: envDev } },
-          { loader: `resolve-url-loader`, options: {sourceMap: envDev } },
+          { loader: `resolve-url-loader`, options: { sourceMap: envDev } },
           { loader: `sass-loader`, options: { sourceMap: true, precision: 8 } }
         ]
-      })},
-      { test: /\.(css|s[ac]ss)$/, exclude: srcDir,  use: vendorCSS.extract({
-        fallback: `style-loader`, use: [
-          { loader: `css-loader`, options: {
+      }) },
+      { test: /\.(css|s[ac]ss)$/, exclude: srcDir,  use: vendorCSS.extract({ //eslint-disable-line
+        fallback: `style-loader`, use: [ //eslint-disable-line
+          { loader: `css-loader`, options: { //eslint-disable-line
             modules: false,
             sourceMap: envDev,
             importLoaders: 3
           } },
           { loader: `postcss-loader`, options: { sourceMap: envDev } },
-          { loader: `resolve-url-loader`, options: {sourceMap: envDev } },
+          { loader: `resolve-url-loader`, options: { sourceMap: envDev } },
           { loader: `sass-loader`, options: { sourceMap: true, precision: 8 } }
         ]
-      })},
+      }) },
+      { test: /\.jsx?$/, exclude: npmDir, loader: `babel-loader`, options: { //eslint-disable-line
+        "extends": join(rootDir, `.babelrc`),
+        "plugins": [
+          [`react-css-modules`, {  //eslint-disable-line
+            context: rootDir,
+            exclude: `node_modules`,
+            filetypes: { ".scss": { syntax: `postcss-scss` } },
+            generateScopedName: `[local]_[hash:base64:5]`,
+            webpackHotModuleReloading: envDev
+          }]  //eslint-disable-line
+        ]
+      } },
       { test: /\.json$/, loader: `json-loader` },
       { test: /\.(graphql|gql)$/, exclude: npmDir, loader: `graphql-tag/loader` },
       { test: /\.(mp4|mov|ogg|webm)(\?.*)?$/i, loader: `url-loader` },
@@ -150,9 +162,9 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
-    hot: true,
+    hot: envDev,
     port: port + 100,
-    host: host,
+    host,
     compress: true,
     inline: true,
     watchContentBase: true,
@@ -174,12 +186,12 @@ module.exports = {
       serviceWorker: envProd ? `/service-worker.js` : null,
       inject: false,
       chunksSortMode: `dependency`,
-      minify: envProd ? { removeComments: true, collapseWhitespace: true } : undefined
+      minify: envProd ? { removeComments: true, collapseWhitespace: true } : undefined // eslint-disable-line
     }),
     new WebpackPwaManifest({
       name: title,
       short_name: name,
-      description: description,
+      description,
       background_color: bgColor,
       theme_color: themeColor,
       display: `standalone`,
@@ -198,15 +210,15 @@ module.exports = {
     ...(envProd
       ? [
         new SWPrecacheWebpackPlugin({
-      		navigateFallback: `index.html`,
+          navigateFallback: `index.html`,
           filepath: `${outDir}/service-worker.js`,
-      		minify: true,
-      		staticFileGlobsIgnorePatterns: [
-      			/polyfills(\..*)?\.js$/,
-      			/\.map$/,
-      			/asset-manifest\.json$/
-      		]
-      	}),
+          minify: true,
+          staticFileGlobsIgnorePatterns: [
+            /polyfills(\..*)?\.js$/,
+            /\.map$/,
+            /asset-manifest\.json$/
+          ]
+        }),
         new LoaderOptionsPlugin({
           options: { htmlLoader: {
             minimize: true,
@@ -224,12 +236,12 @@ module.exports = {
     new DefinePlugin({
       '__DEV__': !envProd,
       'ENV': JSON.stringify(ENV),
-      'HMR': true,
+      'HMR': envDev,
       'process.env': {
-        'ENV': JSON.stringify(ENV),
-        'NODE_ENV': JSON.stringify(ENV),
-        'HMR': true,
-        ...(!envProd ? { 'WEBPACK_HOST': JSON.stringify(host), 'WEBPACK_PORT': JSON.stringify(port) } : {})
+        ENV: JSON.stringify(ENV),
+        NODE_ENV: JSON.stringify(ENV),
+        HMR: envDev,
+        ...(envProd ? {} : { WEBPACK_HOST: JSON.stringify(host), WEBPACK_PORT: JSON.stringify(port) })
       }
     }),
     new LodashModuleReplacementPlugin(),
@@ -253,8 +265,8 @@ module.exports = {
         new NamedModulesPlugin(),
         new NoEmitOnErrorsPlugin(),
         new BrowserSyncPlugin({
-          host: host,
-          port: port,
+          host,
+          port,
           proxy: `http://${host}:${port + 100}/`,
           open: false
         }, {
