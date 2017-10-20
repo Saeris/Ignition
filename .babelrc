@@ -1,47 +1,180 @@
 {
-  "plugins": [
-    "react-hot-loader/babel",
-    ["react-css-modules", {
-      "filetypes": {
-        ".scss": {
-          "syntax": "postcss-scss",
-          "plugins": ["postcss-nested"]
-        }
-      },
-      "generateScopedName": "[name]_[hash:base64:5]",
-      "webpackHotModuleReloading": true
-    }],
-    "lodash"
-  ],
-  "presets": [
-    ["env", {
-      "targets": { "browsers": [ "last 2 versions", "not ie <= 11" ] },
-      "loose": true,
-      "modules": false,
-      "useBuiltIns": true
-    }],
-    ["es2015", { "modules": false }],
-    "stage-0",
-    "react"
-  ],
   "env": {
-    "node": {
+    "test": {
+      "sourceMaps": "inline",
       "plugins": [
-        "transform-decorators-legacy",
         "transform-class-properties",
-        "transform-object-rest-spread",
+        "transform-decorators-legacy",
         "transform-es2015-shorthand-properties",
-        "transform-function-bind"
+        "transform-function-bind",
+        "transform-object-rest-spread",
+        "transform-optional-chaining",
+        ["provide-modules", {
+          "classnames": "classNames",
+          "core-js/fn/promise": "Promise",
+          "decko": [
+            "debounce",
+            "memoize"
+          ],
+          "linkstate": "linkState",
+          "preact": [
+            "h"
+          ],
+          "react": [
+            "Component",
+            { "PureComponent": "Pure" },
+            "React"
+          ],
+          "react-apollo": [
+            "graphql",
+            "gql"
+          ],
+          "react-redux": [
+            "connect"
+          ],
+          "regenerator-runtime": "regeneratorRuntime",
+          "prop-types": "PropTypes"
+        }],
+        ["babel-plugin-webpack-alias", { "config": "./webpack.config.js"  }],
+        ["inline-replace-variables", {
+          "ENV": { "type": "node", "replacement": "process.env.NODE_ENV" }
+        }],
+        ["transform-react-jsx", { "pragma": "h" }],
+
+        "istanbul",
+        ["react-css-modules", {
+          "filetypes": { ".scss": { "syntax": "postcss-scss" } },
+          "generateScopedName": "[local]_[hash:base64:5]",
+          "webpackHotModuleReloading": false
+        }],
+      ],
+      "presets": [
+        "babel-preset-power-assert",
+        ["env", {
+          "targets": { "node": "current" },
+          "useBuiltIns": "usage"
+        }]
+      ]
+    },
+    "development": {
+      "plugins": [
+        "react-hot-loader/babel",
+
+        "transform-class-properties",
+        "transform-decorators-legacy",
+        "transform-es2015-shorthand-properties",
+        "transform-function-bind",
+        "transform-object-rest-spread",
+        "transform-optional-chaining",
+        ["provide-modules", {
+          "classnames": "classNames",
+          "core-js/fn/promise": "Promise",
+          "decko": [
+            "debounce",
+            "memoize"
+          ],
+          "linkstate": "linkState",
+          "preact": [
+            "h"
+          ],
+          "react": [
+            "Component",
+            { "PureComponent": "Pure" },
+            "React"
+          ],
+          "react-apollo": [
+            "graphql",
+            "gql"
+          ],
+          "react-redux": [
+            "connect"
+          ],
+          "regenerator-runtime": "regeneratorRuntime",
+          "prop-types": "PropTypes"
+        }],
+        ["babel-plugin-webpack-alias", { "config": "./webpack.config.js"  }],
+        ["inline-replace-variables", {
+          "ENV": { "type": "node", "replacement": "process.env.NODE_ENV" }
+        }],
+        ["transform-react-jsx", { "pragma": "h" }],
+
+        "lodash",
+        ["react-css-modules", {
+          "filetypes": { ".scss": { "syntax": "postcss-scss" } },
+          "generateScopedName": "[local]_[hash:base64:5]",
+          "webpackHotModuleReloading": true
+        }],
       ],
       "presets": [
         ["env", {
-          "targets": { "node": 7 },
-          "loose": true,
-          "modules": "commonjs"
+          "targets": { "browsers": [ "last 2 versions", "not ie <= 11" ] },
+          "modules": false,
+          "useBuiltIns": "usage"
         }],
-        ["es2015", { "modules": false }],
         "stage-0",
-        "react"
+        "flow"
+      ]
+    },
+    "production": {
+      "plugins": [
+        "transform-class-properties",
+        "transform-decorators-legacy",
+        "transform-es2015-shorthand-properties",
+        "transform-function-bind",
+        "transform-object-rest-spread",
+        "transform-optional-chaining",
+        ["provide-modules", {
+          "classnames": "classNames",
+          "core-js/fn/promise": "Promise",
+          "decko": [
+            "debounce",
+            "memoize"
+          ],
+          "linkstate": "linkState",
+          "preact": [
+            "h"
+          ],
+          "react": [
+            "Component",
+            { "PureComponent": "Pure" },
+            "React"
+          ],
+          "react-apollo": [
+            "graphql",
+            "gql"
+          ],
+          "react-redux": [
+            "connect"
+          ],
+          "regenerator-runtime": "regeneratorRuntime",
+          "prop-types": "PropTypes"
+        }],
+        ["babel-plugin-webpack-alias", { "config": "./webpack.config.js"  }],
+        ["inline-replace-variables", {
+          "ENV": { "type": "node", "replacement": "process.env.NODE_ENV" }
+        }],
+        ["transform-react-jsx", { "pragma": "h" }],
+
+        "lodash",
+        ["transform-runtime", {
+          "helpers": false,
+          "polyfill": false,
+          "regenerator": true
+        }],
+        ["react-css-modules", {
+          "filetypes": { ".scss": { "syntax": "postcss-scss" } },
+          "generateScopedName": "[local]_[hash:base64:5]",
+          "webpackHotModuleReloading": false
+        }],
+      ],
+      "presets": [
+        ["env", {
+          "targets": { "browsers": [ "last 2 versions", "not ie <= 11" ] },
+          "modules": false,
+          "useBuiltIns": "usage"
+        }],
+        "stage-0",
+        "flow"
       ]
     }
   }

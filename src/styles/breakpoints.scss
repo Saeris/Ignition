@@ -1,0 +1,10 @@
+$mobile-small: ["<=320px", "portrait"];
+$mobile-medium: [">320px", "<=375px", "portrait"];
+$mobile-large: [">375px", "<=425px", "portrait"];
+$mobile-landscape: [">425px", "<=768px", "landscape"];
+$tablet-portrait: [">425px", "<=768px", "portrait"];
+$tablet-landscape: [">768px", "<=1024px", "landscape"];
+$laptop: [">768px", "<=1024px"];
+$laptop-large: [">1024px", "<=1440px"];
+$desktop: [">1440px", "<=2560px"];
+$desktop-large: [">2560px"];
