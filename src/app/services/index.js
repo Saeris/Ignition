@@ -1,2 +1,2 @@
 export { apollo } from "./apollo"
-export { store } from "./store"
+export { store, Reducer } from "./store"
