@@ -2,35 +2,22 @@
 @import "~include-media/dist/include-media";
 
 @mixin styles() {
-  :global(#home) {
-    display: flex;
-    flex-direction: column;
+  .modal {
+    position: absolute;
+    z-index: 30;
+    display: none;
     align-items: center;
+    justify-content: center;
     width: 100%;
-
-    .header {
-      display: flex;
-      flex: 0 0 auto;
-      flex-direction: column;
-      align-content: center;
-      justify-content: center;
-      width: 100%;
-      height: 150px;
-      padding: 20px;
-      color: white;
-      text-align: center;
-      background-color: #222;
-
-      h1 {
-        flex: 0 0 auto;
-        margin: 0;
-      }
-
-      h2 {
-        flex: 0 0 auto;
-        margin: 0;
-      }
+    height: 100vh;
+    overflow: {
+      y: auto;
+      x: hidden;
     }
+  }
+
+  &.open {
+    display: flex;
   }
 }
 

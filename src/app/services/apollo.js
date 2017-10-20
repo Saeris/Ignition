@@ -1,33 +1,19 @@
-import { ApolloClient, createBatchingNetworkInterface } from "react-apollo"
-
-class Apollo {
-  constructor() {
-    // http://dev.apollodata.com/core/network.html
-
-    // Configure the client to use the api provider from our api config
-    let networkInterface = createBatchingNetworkInterface({
-      uri: `https://api.github.com/graphql`,
-      batchInterval: 10
-    })
-
-    // Add authorization tokens to our request headers before making calls to the api
-    networkInterface.use([
-      {
-        applyBatchMiddleware(req, next) {
-          if (!req.options.headers) req.options.headers = {}
-          //req.options.headers.authorization = `bearer ${token}`
-          next()
-        }
-      }
-    ])
-
-    this.client = new ApolloClient({
-      networkInterface,
-      queryDeduplication: true,
-      dataIdFromObject: o => o.id
-    })
-  }
-}
+import ApolloClient from "apollo-client"
+import { ApolloLink } from "apollo-link"
+import { RetryLink } from "apollo-link-retry"
+import { BatchHttpLink } from "apollo-link-batch-http"
+import InMemoryCache from "apollo-cache-inmemory"
 
 // Export our Apollo client instance as a singleton
-export const apollo = new Apollo()
+export const apollo = new ApolloClient({
+  link: ApolloLink.from([
+    new RetryLink(),
+    new BatchHttpLink({
+      uri: ENV === `production` ? `` : `http://localhost:1337/graphql`
+    })
+  ]),
+  cache: new InMemoryCache({
+    dataIdFromObject: o => o.id
+  }),
+  connectToDevTools: true
+})
