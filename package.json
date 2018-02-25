@@ -1,7 +1,7 @@
 {
   "name": "ignition",
   "main": "dist/app.js",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Get off the ground with React, Redux, Apollo and Webpack.",
   "productName": "Ignition",
   "homepage": "https://github.com/saeris/ignition#readme",
