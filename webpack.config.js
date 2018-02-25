@@ -44,31 +44,19 @@ module.exports = {
   context: rootDir,
   entry: {
     vendor: [
-      `font-awesome/scss/font-awesome.scss`,
-      `bootstrap/scss/bootstrap-reboot.scss`,
       `history`,
       `prop-types`,
       `preact`,
       `preact-compat`,
       `react-apollo`,
-      `react-redux`,
       `react-router`,
-      `react-router-dom`,
-      `react-router-redux`,
-      `redux`,
-      `redux-logger`
-    ],
-    polyfills: [
-      `babel-polyfill`,
-      `whatwg-fetch`
+      `react-router-dom`
     ],
     app: [
       ...(envDev
         ? [
-          `react-hot-loader/patch`,
           `webpack-dev-server/client?http://${host}:${port + 100}/`,
-          `webpack/hot/only-dev-server`,
-          `preact/devtools`
+          `webpack/hot/only-dev-server`
         ]
         : []),
       `./src/app.js`
@@ -137,18 +125,7 @@ module.exports = {
           { loader: `sass-loader`, options: { sourceMap: true, precision: 8 } }
         ]
       }) },
-      { test: /\.jsx?$/, exclude: npmDir, loader: `babel-loader`, options: { //eslint-disable-line
-        "extends": join(rootDir, `.babelrc`),
-        "plugins": [
-          [`react-css-modules`, {  //eslint-disable-line
-            context: rootDir,
-            exclude: `node_modules`,
-            filetypes: { ".scss": { syntax: `postcss-scss` } },
-            generateScopedName: `[local]_[hash:base64:5]`,
-            webpackHotModuleReloading: envDev
-          }]  //eslint-disable-line
-        ]
-      } },
+      { test: /\.jsx?$/, exclude: npmDir, loader: `babel-loader` },
       { test: /\.json$/, loader: `json-loader` },
       { test: /\.(graphql|gql)$/, exclude: npmDir, loader: `graphql-tag/loader` },
       { test: /\.(mp4|mov|ogg|webm)(\?.*)?$/i, loader: `url-loader` },
@@ -240,8 +217,7 @@ module.exports = {
       'process.env': {
         ENV: JSON.stringify(ENV),
         NODE_ENV: JSON.stringify(ENV),
-        HMR: envDev,
-        ...(envProd ? {} : { WEBPACK_HOST: JSON.stringify(host), WEBPACK_PORT: JSON.stringify(port) })
+        HMR: envDev
       }
     }),
     new LodashModuleReplacementPlugin(),
@@ -249,11 +225,6 @@ module.exports = {
     appCSS,
     vendorCSS,
     new optimize.ModuleConcatenationPlugin(),
-    new optimize.CommonsChunkPlugin({
-      name: `polyfills`,
-      chunks: [`polyfills`],
-      minChunks: isVendor
-    }),
     new optimize.CommonsChunkPlugin({
       name: `vendor`,
       chunks: [`app`, `vendor`],

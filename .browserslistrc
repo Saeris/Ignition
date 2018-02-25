@@ -1,0 +1,5 @@
+[production staging]
+last 4 version
+
+[development]
+last 2 version

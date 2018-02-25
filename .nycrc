@@ -1,0 +1,17 @@
+{
+  "require": [
+    "@babel/register"
+  ],
+  "cache": true,
+  "sourceMap": false,
+  "instrument": false,
+  "exclude": [
+    "./.babelrc.js",
+    "./register.js",
+    "./*.config.js",
+    "./wallaby.js",
+    "src/**/__TEST__/*.spec.js",
+    "build",
+    "dist"
+  ]
+}

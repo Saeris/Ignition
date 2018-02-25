@@ -2,7 +2,7 @@ import ApolloClient from "apollo-client"
 import { ApolloLink } from "apollo-link"
 import { RetryLink } from "apollo-link-retry"
 import { BatchHttpLink } from "apollo-link-batch-http"
-import InMemoryCache from "apollo-cache-inmemory"
+import { InMemoryCache } from "apollo-cache-inmemory"
 
 // Export our Apollo client instance as a singleton
 export const apollo = new ApolloClient({

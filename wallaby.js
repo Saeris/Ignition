@@ -15,8 +15,8 @@ module.exports = wallaby => ({
   debug: true,
 
   setup: () => {
-    require(`babel-register`)
-    require(`babel-polyfill`)
+    require(`@babel/register`)
+    require(`@babel/polyfill`)
     require(`isomorphic-fetch`)
   },
 
