@@ -265,7 +265,7 @@ module.exports = {
           simplifyComparisons: envProd,
           typeConstructors: envProd,
           undefinedToVoid: envProd
-        })
+        }, { sourceMap: null })
       ]
       : []),
     ...(envDev
