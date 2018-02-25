@@ -2,7 +2,7 @@
 
 ## What is Ignition?
 
-Ignition is how you get your new project off the ground quickly and on it's way to the moon. Ignition is a starter kit application providing you with a simple and easy to use platform for creating modern React applications without having to fiddle about with configuration. It's ready to go with all the things you need, Redux for state management, Apollo for talking to GraphQL API's, and simple tooling with Webpack. The goal of Ignition is to keep things simple while providing you a great developer experience that you can easily scale into powerful applications.
+Ignition is how you get your new project off the ground quickly and on it's way to the moon. Ignition is a starter kit application providing you with a simple and easy to use platform for creating modern React applications without having to fiddle about with configuration. It's ready to go with all the things you need: Apollo for talking to GraphQL API's and simple tooling with Webpack. The goal of Ignition is to keep things simple while providing you a great developer experience that you can easily scale into powerful applications.
 
 While Ignition is still making final preparations for launch, you can get started with it right now. It has everything needed for liftoff. More features are on the way!
 

@@ -1,4 +1,4 @@
-import Home from "./home"
+import { Home } from "./home"
 
 export default {
   path: `/`,

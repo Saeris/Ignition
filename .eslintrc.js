@@ -29,7 +29,7 @@ module.exports = {
     h: false,
     // react
     Component: false,
-    Pure: false,
+    Fragment: false,
     React: false,
     // react-apollo
     graphql: false,

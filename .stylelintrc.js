@@ -241,7 +241,7 @@ module.exports = {
     "scss/at-mixin-parentheses-space-before"              : "never",
 
     // At-Rule
-    "scss/at-rule-no-unknown"                             : true,
+    "scss/at-rule-no-unknown"                             : [true, { ignoreAtRules: ["import-normalize"] }],
 
     // $variable
     "scss/dollar-variable-colon-space-after"              : "always-single-line",

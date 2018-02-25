@@ -7,26 +7,6 @@
     <meta name="mobile-web-app-capable" content="yes">
     <base href="<%- htmlWebpackPlugin.options.baseURL %>">
     <title><%= htmlWebpackPlugin.options.title %></title>
-    <script>
-      delete window.fetch
-    </script>
-    <script>
-      (function() {
-        var newBrowser = (
-          'fetch' in window &&
-          'Promise' in window &&
-          'assign' in Object &&
-          'keys' in Object
-        );
-        if (!newBrowser) {
-          var scriptEl = document.createElement('script');
-          scriptEl.src = "<%= htmlWebpackPlugin.files.chunks["polyfills"].entry %>";
-          scriptEl.async = false;
-          scriptEl.type = "text/javascript";
-          document.head.appendChild(scriptEl);
-        }
-      })();
-    </script>
     <% for (key in htmlWebpackPlugin.files.css) { %>
       <link href="<%= htmlWebpackPlugin.files.css[key] %>" rel="stylesheet">
     <% } %>
